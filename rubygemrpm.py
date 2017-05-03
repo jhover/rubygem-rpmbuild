@@ -39,9 +39,9 @@ class GemHandler(object):
         self.log = logging.getLogger()
         self.log.info("Handling gem %s" % gemname)
         self.gemname = gemname
-        self.rpmbuilddir = os.path.expanduser(cp.get('rpmbuilddir'))
-        self.gemtemplate = os.path.expanduser(cp.get('gemtemplate'))
-        self.tempdir = os.path.expanduser(cp.get('tempdir'))
+        self.rpmbuilddir = os.path.expanduser(cp.get('global','rpmbuilddir'))
+        self.gemtemplate = os.path.expanduser(cp.get('global','gemtemplate'))
+        self.tempdir = os.path.expanduser(cp.get('global','tempdir'))
         #self.packagelog = os.path.expanduser(cp.get('packagelog'))
     
     def setupDirs(self):
