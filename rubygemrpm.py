@@ -54,7 +54,7 @@ class GemHandler(object):
                  '%s/RPMS/noarch' % self.rpmbuilddir,
                  '%s/RPMS/x86_64' % self.rpmbuilddir,
                  '%s/BUILDROOT' % self.rpmbuilddir,
-                 '%s/%s' % self.tempdir, self.gemname,          
+                 '%s/%s' % (self.tempdir, self.gemname),          
             ]
         for d in dirs:
             try:
