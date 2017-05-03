@@ -3,9 +3,15 @@
 # Uses gem2rpm to build RPMs for requested packages.
 # Will forego building spec from template if spec exists (allowing ad-hoc editting). 
 # 
+# Requires rubygem-gem2rpm e.g.   rubygem-gem2rpm-0.11.3-1.el7.noarch
+#
+#
+
+# must define GEMS="actionmailer actionpack actionview"
+# space-separated list of gem names, without 'rubygem-'
+#
 
 . ./deps.sh
-
 
 RPMBUILDDIR=~jhover/rpmbuild
 TEMPLATE=~/etc/rubygem-GEM.spec.template
