@@ -1,0 +1,18 @@
+#!/bin/bash
+# PYVER=`python -V 2>&1  | awk '{ print $2 }'  |  grep -o "[[:digit:]+]\.[[:digit:]]" `
+PYVER=`python -V 2>&1 | awk '{ print $2}' | awk -F '.' '{ print $1"."$2 }' `
+#echo $PYVER
+RPMEXE=/usr/lib/python$PYVER/site-packages/rubygemrpm.py
+HOMEEXE=~/lib/python/rubygemrpm.py
+
+if [ -f $RPMEXE ]; then
+	python /usr/lib/python$PYVER/site-packages/rubygemrpm.py $*
+elif [ -f $HOMEEXE ]; then
+    export PYTHONPATH=$PYTHONPATH:~/lib/python
+    python $HOMEEXE $*
+else
+	echo "No suitable rubygemrpm executable found."
+fi
+
+
+

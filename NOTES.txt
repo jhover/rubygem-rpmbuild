@@ -1,0 +1,48 @@
+
+
+[jhover@griddev03 SOURCES]$ gem2rpm -d puma-3.8.2.gem 
+rubygem(rdoc) => 4.0
+rubygem(rdoc) < 5
+rubygem(rack) >= 1.1
+rubygem(rack) < 3.0
+rubygem(rake-compiler) => 0.8
+rubygem(rake-compiler) < 1
+rubygem(hoe) => 3.14
+rubygem(hoe) < 4
+
+
+
+Problems:
+
+-rw-r--r-- 1 jhover rhstaff 1.6K May  3 14:52 /usatlas/u/jhover/rpmbuild/SPECS/rubygem-asciimath.spec
+error: line 13: Empty tag: URL:
+*******************************************************
+asciimath failed to build. *******************************************
+*******************************************************
+
+Handling blade-qunit ...
+ERROR:  Could not find a valid gem 'blade-qunit' (>= 0) in any repository
+
+
+
+U_HASH)
+error: Arch dependent binaries in noarch package
+RPM build errors:
+    Arch dependent binaries in noarch package
+*******************************************************
+bluecloth failed to build. *******************************************
+*******************************************************
+
+
++ gem install --local --install-dir /usatlas/u/jhover/rpmbuild/BUILDROOT/rubygem-concurrent-ruby-0.7.2-1.x86_64/usatlas/u/jhover/.gem/ruby --force /usatlas/u/jhover/rpmbuild/SOURCES/concurrent-ruby-0.7.2.gem
+ERROR:  Could not find a valid gem '/usatlas/u/jhover/rpmbuild/SOURCES/concurrent-ruby-0.7.2.gem' (>= 0) in any repository
+error: Bad exit status from /var/tmp/rpm-tmp.954lrH (%install)
+
+
+RPM build errors:
+    Bad exit status from /var/tmp/rpm-tmp.954lrH (%install)
+*******************************************************
+concurrent-ruby failed to build. *******************************************
+*******************************************************
+
+
