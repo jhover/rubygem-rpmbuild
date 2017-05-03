@@ -48,14 +48,20 @@ class GemHandler(object):
         '''
         setup rpmbuild RPMS SOURCES SPECS
         '''
-        os.makedirs('%s/SOURCES' % self.rpmbuilddir)
-        os.makedirs('%s/SPECS' % self.rpmbuilddir)
-        os.makedirs('%s/BUILD' % self.rpmbuilddir)
-        os.makedirs('%s/RPMS/noarch' % self.rpmbuilddir)
-        os.makedirs('%s/RPMS/x86_64' % self.rpmbuilddir)
-        os.makedirs('%s/BUILDROOT' % self.rpmbuilddir)
-        os.makedirs('%s/%s' % self.tempdir, self.gemname)
-        
+        dirs = [ '%s/SOURCES' % self.rpmbuilddir,
+                 '%s/SPECS' % self.rpmbuilddir,
+                 '%s/BUILD' % self.rpmbuilddir,
+                 '%s/RPMS/noarch' % self.rpmbuilddir,
+                 '%s/RPMS/x86_64' % self.rpmbuilddir,
+                 '%s/BUILDROOT' % self.rpmbuilddir,
+                 '%s/%s' % self.tempdir, self.gemname,          
+            ]
+        for d in dirs:
+            try:
+                os.makedirs(d)
+            except OSError, e:
+                pass
+        self.log.debug("Various dirs made OK.")
         
     def fetchGem(self):
         '''
