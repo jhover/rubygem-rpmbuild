@@ -20,6 +20,29 @@ rpm_data_files=[#('/etc/autopyfactory', libexec_files),
 home_data_files=[#('etc', libexec_files),
                  ('etc', etc_files),
                  ]
+
+def choose_data_files():
+    rpminstall = True
+    userinstall = False
+     
+    if 'bdist_rpm' in sys.argv:
+        rpminstall = True
+
+    elif 'install' in sys.argv:
+        for a in sys.argv:
+            if a.lower().startswith('--home'):
+                rpminstall = False
+                userinstall = True
+                
+    if rpminstall:
+        return rpm_data_files
+    elif userinstall:
+        return home_data_files
+    else:
+        # Something probably went wrong, so punt
+        return rpm_data_files
+
+
 setup(
     name="rubygemrpm",
     version=release_version,
@@ -41,7 +64,8 @@ setup(
           'Topic :: System Administration :: Management',
     ],
     scripts=[ 'scripts/rubygemrpm',
-             ]
+             ],
+    data_files = choose_data_files()
 
 )
 
