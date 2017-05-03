@@ -176,7 +176,7 @@ class GemRPMCLI(object):
         
         
         self.results= parser.parse_args()
-        print(self.results)
+        #print(self.results)
 
     def invoke(self):
         cp = ConfigParser()
