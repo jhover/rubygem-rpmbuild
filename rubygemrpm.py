@@ -108,9 +108,6 @@ class GemHandler(object):
         
         '''
     
-    def parseDeps(self):
-        '''
-        '''    
         
     def handleGem(self):
         self.setupDirs()
