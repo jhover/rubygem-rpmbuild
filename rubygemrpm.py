@@ -71,8 +71,11 @@ class GemHandler(object):
         o = _runtimedcommand(cmd)
         if o is not None:
             self.log.debug("Out is %s" % o)
-            
-            
+            fields = o.split()
+            nv = fields[1]
+            self.version = nv[len(self.gemname)+1:]
+            self.log.debug("Version is %s" % self.version)
+
    
     def makeSpec(self):
         '''
@@ -88,6 +91,17 @@ class GemHandler(object):
         
         '''
         self.deps = []
+        cmd =  "cd %s/SOURCES ;  gem2rpm -d %s-%s.gem" % (self.rpmbuilddir, self.gemname, self.version)
+        self.log.debug("Command is %s" % cmd )
+        o = _runtimedcommand(cmd)
+        if o is not None:
+            self.log.debug("Out is %s" % o)
+            lines = o.split('\n')
+            for line in lines:
+                (dep, op, ver) = line.split()
+                self.log.debug("Dep is %s" % dep)
+                
+          
         
     def buildRPM(self):
         '''
