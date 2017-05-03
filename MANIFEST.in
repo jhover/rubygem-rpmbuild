@@ -1,0 +1,5 @@
+include *.txt *.py *.cfg
+recursive-include scripts * 
+recursive-include misc *.txt *.sh 
+recursive-include etc *.conf 
+recursive-include credible *.py *.pyc *.pyo 
