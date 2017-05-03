@@ -52,7 +52,7 @@ setup(
     author='John Hover',
     author_email='jhover@bnl.gov',
     url='https://www.racf.bnl.gov/experiments/usatlas/griddev/',
-    modules=[ 'rubygemrpm',
+    py_modules=[ 'rubygemrpm',
               ],
     classifiers=[
           'Development Status :: 3 - Beta',
