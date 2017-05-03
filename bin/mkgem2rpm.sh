@@ -14,7 +14,7 @@
 . ./deps.sh
 
 RPMBUILDDIR=~jhover/rpmbuild
-TEMPLATE=~/etc/rubygem-GEM.spec.template
+TEMPLATE=~/git/rubygem-rpmbuild/etc/rubygem-GEM.spec.template
 PKGLOG=~/mkgem2rpm.pkg.log
 
 #echo " " > $PKGLOG
