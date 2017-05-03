@@ -99,8 +99,10 @@ class GemHandler(object):
             if len(o) > 1:
                 lines = o.split('\n')
                 for line in lines:
-                    (dep, op, ver) = line.split()
-                    self.log.debug("Dep is %s" % dep)
+                    if len(line) > 1:
+                        (dep, op, ver) = line.split()
+                        self.log.debug("Dep is %s" % dep)
+                        
             else:
                 self.log.debug("No dependencies.")
           
