@@ -164,6 +164,7 @@ class GemRPMCLI(object):
         self.log.info("Config is %s" % ns.configpath)
         cp.read(os.path.expanduser(ns.configpath))
         gh = GemHandler(cp, ns.gemname)
+        gh.handleGem()
 
 
 
