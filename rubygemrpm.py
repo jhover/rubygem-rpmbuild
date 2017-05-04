@@ -58,6 +58,7 @@ class GemHandler(object):
         self.tempdir = os.path.expanduser(cp.get('global','tempdir'))
         self.skipdeps = skipdeps
         self.rebuild = rebuild
+        self.version = None
         #self.packagelog = os.path.expanduser(cp.get('packagelog'))
     
     
@@ -254,9 +255,12 @@ class GemHandler(object):
         self.setupDirs()
         try:
             self.fetchGem()
-            self.makeSpec()
-            self.fixSpec()
-            self.buildRPM()
+            if not self.isBuilt():
+                self.makeSpec()
+                self.fixSpec()
+                self.buildRPM()
+            else:
+                self.log.info("RPM for %s-%s already built. Skipping..." % (self.gemname, self.version))
             self.log.debug("Adding gem %s to done list." % self.gemname)
             GemHandler.handledgems.add(self.gemname)
             if not self.skipdeps:
