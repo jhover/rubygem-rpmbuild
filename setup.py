@@ -9,7 +9,7 @@ release_version="0.9.0"
 
 
 etc_files = ['etc/rubygemrpm.conf',
-             'etc/rubygem-GEM.spec.template',
+             'etc/rubygem-GEM-noarch.spec.template',
              ]
 
 rpm_data_files=[#('/etc/autopyfactory', libexec_files),
