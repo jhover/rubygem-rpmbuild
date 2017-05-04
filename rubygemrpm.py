@@ -118,11 +118,18 @@ class GemHandler(object):
     
     def fixSpec(self):
         '''
+          Fix empty URL Tag value...
         '''
-        #sf = open(self.specfile, 'w')
-        #sf.close()
+        sf = open(self.specfile, 'r')
+        linelist = sf.readlines()
+        sf.close()
         
-        
+        sf2 = open(self.specfile, 'w')
+        for line in linelist:
+            if line == 'URL: ':
+                line = 'URL: http://rubygems.org/'
+            sf2.write(line)
+        sf2.close()
         
         
     def parseDeps(self):
@@ -293,9 +300,9 @@ class GemRPMCLI(object):
         gh = GemHandler(cp, ns.gemname, skipdeps=ns.skipdeps)
         gh.handleGem()
         self.log.info("Handled %d gems: %s" % ( len(GemHandler.handledgems),
-                                                GemHandler.handledgems ))
+                                                list(GemHandler.handledgems) ))
         self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems), 
-                                                      GemHandler.problemgems))
+                                                      list(GemHandler.problemgems)))
 
 
 if __name__ == '__main__':
