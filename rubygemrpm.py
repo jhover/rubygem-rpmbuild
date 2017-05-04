@@ -82,12 +82,23 @@ class GemHandler(object):
    
     def makeSpec(self):
         '''
+        gem2rpm -t $TEMPLATE  $gem-[0-9]*.gem > $RPMBUILDDIR/SPECS/rubygem-$gem.spec
         
         '''
+        cmd =  "gem2rpm -t %s %s-%s.gem > %s/SPECS/rubygem-%s.spec " % (self.gemtemplate, 
+                                                                        self.gemname,
+                                                                        self.version,
+                                                                        self.rpmbuilddir,
+                                                                        self.gemname)
+        self.log.debug("Command is %s" % cmd )
+        o = _runtimedcommand(cmd)
+        self.log.debug("Created rubygem-%s.spec " % self.gemname)
     
     def fixSpec(self):
         '''
         '''
+        
+        
         
     def parseDeps(self):
         '''
@@ -120,9 +131,18 @@ class GemHandler(object):
         
     def buildRPM(self):
         '''
-        
+    rpmbuild -bb $RPMBUILDDIR/SPECS/rubygem-$gem.spec    
         '''
         self.log.debug("Building gem %s" % self.gemname)
+        cmd =  "rpmbuild -bb %s/SPECS/rubygem-%s.spec" % (self.rpmbuilddir, 
+                                                          self.gemname)
+        self.log.debug("Command is %s" % cmd )
+        o = _runtimedcommand(cmd)
+        if o is not None:
+            self.log.debug("RPM for rubygem-%s built OK." % self.gemname)
+        else:
+            self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
+    
     
     def handleDeps(self):
         '''
