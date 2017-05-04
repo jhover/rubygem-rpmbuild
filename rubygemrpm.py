@@ -176,14 +176,16 @@ class GemHandler(object):
         nf =  "%s/RPMS/x86_64/rubygem-%s-%s-1.x86_64.rpm" % (self.rpmbuilddir,
                                                     self.gemname,
                                                     self.version)
-        isbuilt = False
+        rpmbuilt = False
         if os.path.isfile(naf):
-            isbuilt = True
-        if os.path.isfile(nf):
-            isbuilt = True
-        self.log.debug('RPM for rubygem-%s-%s exists.' % (self.gemname,
+            rpmbuilt = True
+            self.log.debug('Noarch RPM for rubygem-%s-%s exists.' % (self.gemname,
                                                           self.version))
-        return isbuilt
+        if os.path.isfile(nf):
+            rpmbuilt = True
+            self.log.debug('Native RPM for rubygem-%s-%s exists.' % (self.gemname,
+                                                          self.version))
+        return rpmbuilt
         
         
         
