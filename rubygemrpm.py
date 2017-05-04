@@ -46,6 +46,7 @@ class GemBuildException(Exception):
 class GemHandler(object):
     
     handledgems = set()
+    problemgems = set()
     
     def __init__(self, cp , gemname):
         self.log = logging.getLogger()
@@ -160,6 +161,7 @@ class GemHandler(object):
             self.log.info("RPM for rubygem-%s built OK." % self.gemname)
         else:
             self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
+            GemHandler.problemgems.add(self.gemname)
     
     
     def handleDeps(self):
@@ -247,8 +249,8 @@ class GemRPMCLI(object):
         cp.read(os.path.expanduser(ns.configpath))
         gh = GemHandler(cp, ns.gemname)
         gh.handleGem()
-
-
+        self.log.info("Handled %d gems: %s" % ( len(GemHandler.handledgems),GemHandler.handledgems ))
+        self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems, GemHandler.problemgems)))
 
 
 if __name__ == '__main__':
