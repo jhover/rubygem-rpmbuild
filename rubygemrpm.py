@@ -127,7 +127,7 @@ class GemHandler(object):
         sf2 = open(self.specfile, 'w')
         for line in linelist:
             if line.strip() == 'URL:':
-                line = 'URL: http://rubygems.org/'
+                line = 'URL: http://rubygems.org/\n'
             sf2.write(line)
         sf2.close()
         
