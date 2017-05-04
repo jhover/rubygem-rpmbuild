@@ -271,8 +271,7 @@ class GemRPMCLI(object):
         
         parser.add_argument('-s', '--skipdeps', 
                             action="store_true",
-                            type=bool,
-                            default=False, 
+                            default = False, 
                             dest='skipdeps', 
                             help='skip building deps recursively')  
         
