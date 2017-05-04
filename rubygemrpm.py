@@ -193,7 +193,7 @@ class GemHandler(object):
         '''
             rpmbuild -bb $RPMBUILDDIR/SPECS/rubygem-$gem.spec    
         '''
-        if not self.isBuilt():
+        if not self.isBuilt() and not self.rebuild:
             self.log.debug("Building gem %s" % self.gemname)
             cmd =  "rpmbuild -bb %s/SPECS/rubygem-%s.spec" % (self.rpmbuilddir, 
                                                               self.gemname)
@@ -257,7 +257,7 @@ class GemHandler(object):
         self.setupDirs()
         try:
             self.fetchGem()
-            if not self.isBuilt():
+            if not self.isBuilt() and not self.rebuild:
                 self.makeSpec()
                 self.fixSpec()
                 self.buildRPM()
