@@ -126,6 +126,7 @@ class GemHandler(object):
                         self.log.debug("Dep is %s" % dep)
                     if dep.startswith('rubygem'):
                         depname = dep[8:-1]
+                        self.log.debug("Adding dependency %s" % depname)
                         depset.add(depname)
             else:
                 self.log.debug("No dependencies.")
