@@ -56,7 +56,9 @@ class GemHandler(object):
         self.rpmbuilddir = os.path.expanduser(cp.get('global','rpmbuilddir'))
         self.gemtemplate = os.path.expanduser(cp.get('global','gemtemplate'))
         self.tempdir = os.path.expanduser(cp.get('global','tempdir'))
+        self.skipdeps = skipdeps
         #self.packagelog = os.path.expanduser(cp.get('packagelog'))
+    
     
     def setupDirs(self):
         '''
@@ -117,8 +119,8 @@ class GemHandler(object):
     def fixSpec(self):
         '''
         '''
-        sf = open(self.specfile, 'w')
-        sf.close()
+        #sf = open(self.specfile, 'w')
+        #sf.close()
         
         
         
@@ -221,8 +223,9 @@ class GemHandler(object):
             self.buildRPM()
             self.log.debug("Adding gem %s to done list." % self.gemname)
             GemHandler.handledgems.add(self.gemname)
-            self.parseDeps()
-            self.handleDeps()
+            if not self.skipdeps:
+                self.parseDeps()
+                self.handleDeps()
         except GemBuildException, e:
             self.log.error('Problem building gem %s: Error: %s' % (self.gemname, e) )
 
