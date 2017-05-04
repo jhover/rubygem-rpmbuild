@@ -36,6 +36,12 @@ def _runtimedcommand(cmd):
     return (out, err)
 
 
+class GemBuildException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 
 class GemHandler(object):
     
@@ -86,6 +92,7 @@ class GemHandler(object):
             self.log.info("Gem %s-%s fetched." % (self.gemname, self.version) )
         else:
             self.log.warning("Error/problem fetching %s" % self.gemname)
+            raise GemBuildException('Problem fetching...')
    
    
     def makeSpec(self):
@@ -171,15 +178,18 @@ class GemHandler(object):
         
     def handleGem(self):
         self.setupDirs()
-        self.fetchGem()
-        self.makeSpec()
-        self.fixSpec()
-        self.buildRPM()
-        self.log.debug("Adding gem %s to done list." % self.gemname)
-        GemHandler.handledgems.add(self.gemname)
-        self.parseDeps()
-        self.handleDeps()
-        
+        try:
+            self.fetchGem()
+            self.makeSpec()
+            self.fixSpec()
+            self.buildRPM()
+            self.log.debug("Adding gem %s to done list." % self.gemname)
+            GemHandler.handledgems.add(self.gemname)
+            self.parseDeps()
+            self.handleDeps()
+        except GemBuildException, e:
+            self.log.error('Problem building gem %s: Error: %s' % self.gemname, e)
+
 
 class GemRPMCLI(object):
     
