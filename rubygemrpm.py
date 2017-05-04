@@ -29,7 +29,7 @@ def _runtimedcommand(cmd):
     delta = time.time() - before
     log.debug('%s seconds to perform command' %delta)
     if p.returncode == 0:
-        log.debug('Leaving with OK return code. Err is "5s"' % err)
+        log.debug('Leaving with OK return code. Err is "%s"' % err)
     else:
         log.warning('Leaving with bad return code. rc=%s err=%s out=%s' %(p.returncode, err, out ))
         out = None
