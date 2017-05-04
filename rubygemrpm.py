@@ -38,6 +38,7 @@ class GemHandler(object):
     def __init__(self, cp , gemname):
         self.log = logging.getLogger()
         self.log.info("Handling gem %s" % gemname)
+        self.config = cp
         self.gemname = gemname
         self.rpmbuilddir = os.path.expanduser(cp.get('global','rpmbuilddir'))
         self.gemtemplate = os.path.expanduser(cp.get('global','gemtemplate'))
@@ -91,6 +92,7 @@ class GemHandler(object):
         
         '''
         self.deps = []
+        depset = set()
         cmd =  "cd %s/SOURCES ;  gem2rpm -d %s-%s.gem" % (self.rpmbuilddir, self.gemname, self.version)
         self.log.debug("Command is %s" % cmd )
         o = _runtimedcommand(cmd)
@@ -107,14 +109,28 @@ class GemHandler(object):
                             op = fields[1]
                             ver = fields[2]
                         self.log.debug("Dep is %s" % dep)
+                if dep.startswith('rubygem'):
+                    depname = dep[8:-1]
+                    depset.add(depname)
             else:
                 self.log.debug("No dependencies.")
-          
+        self.deps = list(depset)  
         
     def buildRPM(self):
         '''
         
         '''
+        self.log.debug("Building gem %s" % self.gemname)
+    
+    def handleDeps(self):
+        '''
+        
+        '''
+        for dep in self.deps:
+            self.log.debug('Processing dep %s' % dep)
+            gh = GemHandler(self.config, dep)
+            gh.handleGem()
+        self.log.debug("Finished with deps for %s" % self.gemname)
     
         
     def handleGem(self):
@@ -124,6 +140,7 @@ class GemHandler(object):
         self.fixSpec()
         self.buildRPM()
         self.parseDeps()
+        self.handleDeps()
         
         
         
