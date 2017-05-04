@@ -88,7 +88,7 @@ class GemHandler(object):
         cmd =  "cd %s/SOURCES ;  gem fetch %s " % (self.rpmbuilddir, self.gemname)
         self.log.debug("Command is %s" % cmd )
         (r, o, e) = _runtimedcommand(cmd)
-        if r is not 0 and not e.startswith('ERR'):
+        if r is 0 and not e.startswith('ERR'):
             self.log.debug("Out is %s" % o)
             fields = o.split()
             nv = fields[1]
@@ -143,7 +143,7 @@ class GemHandler(object):
         cmd =  "cd %s/SOURCES ;  gem2rpm -d %s-%s.gem" % (self.rpmbuilddir, self.gemname, self.version)
         self.log.debug("Command is %s" % cmd )
         (r, o, e) = _runtimedcommand(cmd)
-        if r is not 0:
+        if r is 0:
             self.log.debug("Out is %s" % o)
             o = o.strip()
             if len(o) > 3:
@@ -199,7 +199,7 @@ class GemHandler(object):
                                                               self.gemname)
             self.log.debug("Command is %s" % cmd )
             (r, o,e) = _runtimedcommand(cmd)
-            if r is not 0:
+            if r is 0:
                 self.log.info("RPM for rubygem-%s built OK." % self.gemname)
             #elif 'error: Arch dependent binaries in noarch package' in e:
             elif 'Building native extensions.' in o:
