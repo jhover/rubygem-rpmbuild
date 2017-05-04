@@ -258,20 +258,24 @@ class GemHandler(object):
     def handleGem(self):
         self.setupDirs()
         try:
-            self.fetchGem()
-            if not self.isBuilt() or self.rebuild:
-                self.makeSpec()
-                self.fixSpec()
-                self.buildRPM()
-            else:
-                self.log.info("RPM for %s-%s already built. Skipping..." % (self.gemname, self.version))
-            self.log.debug("Adding gem %s to done list." % self.gemname)
-            GemHandler.handledgems.add(self.gemname)
-            if not self.skipdeps:
-                self.parseDeps()
-                self.handleDeps()
+            if (self.gemname not in GemHandler.handledgems) and (self.gemname not in GemHandler.problemgems):
+                self.fetchGem()
+                if not self.isBuilt() or self.rebuild:
+                    self.makeSpec()
+                    self.fixSpec()
+                    self.buildRPM()
+                    self.log.debug("Adding gem %s to done list." % self.gemname)
+                    GemHandler.handledgems.add(self.gemname)
+                else:
+                    self.log.info("RPM for %s-%s already built. Skipping..." % (self.gemname, self.version))
+                    self.log.debug("Adding gem %s to done list." % self.gemname)
+                    GemHandler.handledgems.add(self.gemname)
+                if not self.skipdeps:
+                    self.parseDeps()
+                    self.handleDeps()
         except GemBuildException, e:
             self.log.error('Problem building gem %s: Error: %s' % (self.gemname, e) )
+            GemHandler.problemgems.add(self.gemname)
 
 
 class GemRPMCLI(object):
