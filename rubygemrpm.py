@@ -246,7 +246,7 @@ class GemHandler(object):
         '''
         for dep in self.deps:
             self.log.debug('Processing dep %s' % dep)
-            if dep not in GemHandler.handledgems:
+            if dep not in GemHandler.handledgems or dep not in GemHandler.problemgems:
                 gh = GemHandler(self.config, dep)
                 gh.handleGem()
             else:
