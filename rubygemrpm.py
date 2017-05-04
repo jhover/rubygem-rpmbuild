@@ -33,8 +33,7 @@ def _runtimedcommand(cmd):
         log.debug('Leaving with OK return code. Err is "%s"' % err)
     else:
         log.warning('Leaving with bad return code. rc=%s err=%s out=%s' %(p.returncode, err, out ))
-        out = None
-    return (out, err)
+    return (rc, out, err)
 
 
 class GemBuildException(Exception):
@@ -88,8 +87,8 @@ class GemHandler(object):
         '''
         cmd =  "cd %s/SOURCES ;  gem fetch %s " % (self.rpmbuilddir, self.gemname)
         self.log.debug("Command is %s" % cmd )
-        (o, e) = _runtimedcommand(cmd)
-        if o is not None and not e.startswith('ERR'):
+        (r, o, e) = _runtimedcommand(cmd)
+        if r is not 0 and not e.startswith('ERR'):
             self.log.debug("Out is %s" % o)
             fields = o.split()
             nv = fields[1]
@@ -114,7 +113,7 @@ class GemHandler(object):
                                                                         self.rpmbuilddir,
                                                                         self.gemname)
         self.log.debug("Command is %s" % cmd )
-        (o, e) = _runtimedcommand(cmd)
+        (r, o, e) = _runtimedcommand(cmd)
         self.log.info("Created rubygem-%s.spec " % self.gemname)
         self.specfile = "%s/SPECS/rubygem-%s.spec" % ( self.rpmbuilddir, self.gemname)
     
@@ -143,8 +142,8 @@ class GemHandler(object):
         depset = set()
         cmd =  "cd %s/SOURCES ;  gem2rpm -d %s-%s.gem" % (self.rpmbuilddir, self.gemname, self.version)
         self.log.debug("Command is %s" % cmd )
-        (o, e) = _runtimedcommand(cmd)
-        if o is not None:
+        (r, o, e) = _runtimedcommand(cmd)
+        if r is not 0:
             self.log.debug("Out is %s" % o)
             o = o.strip()
             if len(o) > 3:
@@ -199,8 +198,8 @@ class GemHandler(object):
             cmd =  "rpmbuild -bb %s/SPECS/rubygem-%s.spec" % (self.rpmbuilddir, 
                                                               self.gemname)
             self.log.debug("Command is %s" % cmd )
-            (o,e) = _runtimedcommand(cmd)
-            if o is not None:
+            (r, o,e) = _runtimedcommand(cmd)
+            if r is not 0:
                 self.log.info("RPM for rubygem-%s built OK." % self.gemname)
             #elif 'error: Arch dependent binaries in noarch package' in e:
             elif 'Building native extensions.' in o:
