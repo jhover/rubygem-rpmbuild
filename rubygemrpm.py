@@ -48,7 +48,7 @@ class GemHandler(object):
     handledgems = set()
     problemgems = set()
     
-    def __init__(self, cp , gemname):
+    def __init__(self, cp , gemname, skipdeps=False):
         self.log = logging.getLogger()
         self.log.info("Handling gem %s" % gemname)
         self.config = cp
