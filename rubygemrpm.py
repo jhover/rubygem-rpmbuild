@@ -302,23 +302,23 @@ class GemRPMCLI(object):
                             action="store", 
                             dest='configpath', 
                             default='~/etc/rubygemrpm.conf', 
-                            help='configuration file path.')
+                            help='Configuration file path.')
         
         parser.add_argument('-d', '--debug', 
                             action="store_true", 
                             dest='debug', 
-                            help='debug logging')        
+                            help='Debug level logging')        
 
         parser.add_argument('-v', '--verbose', 
                             action="store_true", 
                             dest='info', 
-                            help='info logging')  
+                            help='Info level logging')  
         
         parser.add_argument('-s', '--skipdeps', 
                             action="store_true",
                             default = False, 
                             dest='skipdeps', 
-                            help='skip building deps recursively')  
+                            help='Skip building deps recursively')  
         
         parser.add_argument('-r', '--rebuild',
                             action="store_true",
@@ -328,7 +328,8 @@ class GemRPMCLI(object):
         
         
         parser.add_argument('gemnames',
-                            nargs = '*', 
+                            nargs = '*',
+                            metavar = 'Name', 
                             action="store")
         
         
