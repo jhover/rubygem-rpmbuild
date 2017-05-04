@@ -169,6 +169,7 @@ class GemHandler(object):
         else:
             self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
             GemHandler.problemgems.add(self.gemname)
+            raise GemBuildException('Problem building RPM.')
     
     def convertSpecNative(self):
         '''
