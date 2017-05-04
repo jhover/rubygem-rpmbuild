@@ -101,9 +101,12 @@ class GemHandler(object):
                 lines = o.split('\n')
                 for line in lines:
                     if len(line) > 3:
-                        (dep, op, ver) = line.split()
+                        fields = line.split()
+                        if len(fields) > 2:
+                            (dep, op, ver) = fields.split()
+                        else:
+                            dep = fields[0]
                         self.log.debug("Dep is %s" % dep)
-                        
             else:
                 self.log.debug("No dependencies.")
           
