@@ -324,12 +324,12 @@ class GemRPMCLI(object):
                             action="store_true",
                             default = False,
                             dest = 'rebuild',
-                            help = 'Rebuild even if RPM exists.')
+                            help = 'Rebuild even if RPM exists')
         
         
         parser.add_argument('gemnames',
                             nargs = '*',
-                            metavar = 'Name', 
+                            metavar = 'GEMNAME', 
                             action="store")
         
         
