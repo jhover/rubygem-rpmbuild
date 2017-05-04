@@ -287,8 +287,10 @@ class GemRPMCLI(object):
         cp.read(os.path.expanduser(ns.configpath))
         gh = GemHandler(cp, ns.gemname, skipdeps=ns.skipdeps)
         gh.handleGem()
-        self.log.info("Handled %d gems: %s" % ( len(GemHandler.handledgems),GemHandler.handledgems ))
-        self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems, GemHandler.problemgems)))
+        self.log.info("Handled %d gems: %s" % ( len(GemHandler.handledgems),
+                                                GemHandler.handledgems ))
+        self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems), 
+                                                      GemHandler.problemgems))
 
 
 if __name__ == '__main__':
