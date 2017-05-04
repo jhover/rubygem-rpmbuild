@@ -27,7 +27,7 @@ def _runtimedcommand(cmd):
     out = None
     (out, err) = p.communicate()
     delta = time.time() - before
-    log.debug('%s seconds to perform command' %delta)
+    log.debug('%s seconds to perform command' % delta)
     if p.returncode == 0:
         log.debug('Leaving with OK return code. Err is "%s"' % err)
     else:
@@ -336,6 +336,7 @@ class GemRPMCLI(object):
         print(self.results)
 
     def invoke(self):
+        starttime = time.time()
         cp = ConfigParser()
         ns = self.results
         self.log.info("Config is %s" % ns.configpath)
@@ -348,7 +349,8 @@ class GemRPMCLI(object):
                                                 list(GemHandler.handledgems) ))
         self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems), 
                                                       list(GemHandler.problemgems)))
-
+        delta = time.time() - starttime
+        self.log.info("Total time: %s " % delta)
 
 if __name__ == '__main__':
     rgcli = GemRPMCLI()
