@@ -33,7 +33,7 @@ def _runtimedcommand(cmd):
         log.debug('Leaving with OK return code. Err is "%s"' % err)
     else:
         log.warning('Leaving with bad return code. rc=%s err=%s out=%s' %(p.returncode, err, out ))
-    return (rc, out, err)
+    return (p.returncode, out, err)
 
 
 class GemBuildException(Exception):
