@@ -27,6 +27,7 @@ BuildRequires: ruby
 BuildRequires: rubygems 
 BuildArch: noarch
 Provides: ruby(<%= spec.name %>) = %{version}
+AutoReqProv: no
 
 %define gemdir /usr/share/gems
 %define gembuilddir %{buildroot}%{gemdir}
