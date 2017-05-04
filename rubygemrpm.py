@@ -111,10 +111,14 @@ class GemHandler(object):
         self.log.debug("Command is %s" % cmd )
         (o, e) = _runtimedcommand(cmd)
         self.log.info("Created rubygem-%s.spec " % self.gemname)
+        self.specfile = "%s/SPECS/rubygem-%s.spec" % ( self.rpmbuilddir, self.gemname)
+    
     
     def fixSpec(self):
         '''
         '''
+        sf = open(self.specfile, 'w')
+        
         
         
         
@@ -159,9 +163,37 @@ class GemHandler(object):
         (o,e) = _runtimedcommand(cmd)
         if o is not None:
             self.log.info("RPM for rubygem-%s built OK." % self.gemname)
+        elif e.contains('error: Arch dependent binaries in noarch package'):
+            self.log.warning('Native package, fixing and building...')
+            self.buildNativeRPM()   
         else:
             self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
             GemHandler.problemgems.add(self.gemname)
+    
+    def convertSpecNative(self):
+        '''
+        Fixes spec for this gem to Arch: x86_64
+        '''
+        self.log.debug("Converting %s spec to native..." % self.gemname)
+        sf = open(self.specfile, 'r')
+        linelist = sf.readlines()
+        sf.close()
+
+        sf2 = open(self.specfile, 'w')
+        for line in linelist:
+            line = line.replace('BuildArch: noarch' , 'BuildArch: x86_64')
+        sf2.write(line)
+        sf2.close()
+    
+    
+    def buildNativeRPM(self):
+        '''
+        Converts spec to Arch: x86-64 and re-builds. 
+        
+        '''
+        self.log.debug("Building gem %s native..." % self.gemname)
+        self.convertSpecNative()
+        self.buildRPM()
     
     
     def handleDeps(self):
@@ -235,19 +267,25 @@ class GemRPMCLI(object):
                             dest='info', 
                             help='info logging')  
         
+        parser.add_argument('-s', '--skipdeps', 
+                            action="store_true",
+                            default=False, 
+                            dest='skipdeps', 
+                            help='skip building deps recursively')  
+        
         parser.add_argument('gemname', 
                              action="store")
         
         
         self.results= parser.parse_args()
-        #print(self.results)
+        print(self.results)
 
     def invoke(self):
         cp = ConfigParser()
         ns = self.results
         self.log.info("Config is %s" % ns.configpath)
         cp.read(os.path.expanduser(ns.configpath))
-        gh = GemHandler(cp, ns.gemname)
+        gh = GemHandler(cp, ns.gemname, skipdeps=ns.skipdeps)
         gh.handleGem()
         self.log.info("Handled %d gems: %s" % ( len(GemHandler.handledgems),GemHandler.handledgems ))
         self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems, GemHandler.problemgems)))
