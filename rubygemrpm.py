@@ -35,6 +35,8 @@ def _runtimedcommand(cmd):
 
 class GemHandler(object):
     
+    handledgems = set()
+    
     def __init__(self, cp , gemname):
         self.log = logging.getLogger()
         self.log.info("Handling gem %s" % gemname)
@@ -128,8 +130,11 @@ class GemHandler(object):
         '''
         for dep in self.deps:
             self.log.debug('Processing dep %s' % dep)
-            gh = GemHandler(self.config, dep)
-            gh.handleGem()
+            if dep not in GemHandler.handledgems:
+                gh = GemHandler(self.config, dep)
+                gh.handleGem()
+            else:
+                self.log.debug("Gem %s already done." % dep)
         self.log.debug("Finished with deps for %s" % self.gemname)
     
         
@@ -139,15 +144,11 @@ class GemHandler(object):
         self.makeSpec()
         self.fixSpec()
         self.buildRPM()
+        self.log.debug("Adding gem %s to done list." % self.gemname)
+        GemHandler.handledgems.add(self.gemname)
         self.parseDeps()
         self.handleDeps()
         
-        
-        
-
-
-
-
 
 class GemRPMCLI(object):
     
