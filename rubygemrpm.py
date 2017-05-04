@@ -85,7 +85,7 @@ class GemHandler(object):
         gem2rpm -t $TEMPLATE  $gem-[0-9]*.gem > $RPMBUILDDIR/SPECS/rubygem-$gem.spec
         
         '''
-        cmd =  "gem2rpm -t %s %s/SPECS%s-%s.gem > %s/SPECS/rubygem-%s.spec " % (
+        cmd =  "gem2rpm -t %s %s/SPECS/%s-%s.gem > %s/SPECS/rubygem-%s.spec " % (
                                                                         self.gemtemplate,
                                                                          self.rpmbuilddir, 
                                                                         self.gemname,
