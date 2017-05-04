@@ -78,7 +78,10 @@ class GemHandler(object):
             nv = fields[1]
             self.version = nv[len(self.gemname)+1:]
             self.log.debug("Version is %s" % self.version)
-        self.log.info("Gem %s-%s fetched." % (self.gemname, self.version) )
+            self.log.info("Gem %s-%s fetched." % (self.gemname, self.version) )
+        else:
+            self.log.warning("Error/problem fetching %s" % self.gemname)
+   
    
     def makeSpec(self):
         '''
