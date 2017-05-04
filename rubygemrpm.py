@@ -338,7 +338,7 @@ class GemRPMCLI(object):
         print(self.results)
 
     def invoke(self):
-        starttime = datetime.now()
+        starttime = datetime.datetime.now()
         cp = ConfigParser()
         ns = self.results
         self.log.info("Config is %s" % ns.configpath)
@@ -351,7 +351,7 @@ class GemRPMCLI(object):
                                                 list(GemHandler.handledgems) ))
         self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems), 
                                                       list(GemHandler.problemgems)))
-        delta = datetime.now() - starttime
+        delta = datetime.datetime.now() - starttime
         self.log.info("Total time: %s " % str(delta))
 
 if __name__ == '__main__':
