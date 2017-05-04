@@ -327,8 +327,9 @@ class GemRPMCLI(object):
                             help = 'Rebuild even if RPM exists.')
         
         
-        parser.add_argument('gemname', 
-                             action="store")
+        parser.add_argument('gemnames',
+                            nargs = '*', 
+                            action="store")
         
         
         self.results= parser.parse_args()
@@ -339,8 +340,10 @@ class GemRPMCLI(object):
         ns = self.results
         self.log.info("Config is %s" % ns.configpath)
         cp.read(os.path.expanduser(ns.configpath))
-        gh = GemHandler(cp, ns.gemname, skipdeps=ns.skipdeps, rebuild=ns.rebuild)
-        gh.handleGem()
+        for gn in ns.gemnames : 
+            gh = GemHandler(cp, gn , skipdeps=ns.skipdeps, rebuild=ns.rebuild)
+            gh.handleGem()
+                
         self.log.info("Handled %d gems: %s" % ( len(GemHandler.handledgems),
                                                 list(GemHandler.handledgems) ))
         self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems), 
