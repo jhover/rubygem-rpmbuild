@@ -124,9 +124,9 @@ class GemHandler(object):
                             op = fields[1]
                             ver = fields[2]
                         self.log.debug("Dep is %s" % dep)
-                if dep.startswith('rubygem'):
-                    depname = dep[8:-1]
-                    depset.add(depname)
+                    if dep.startswith('rubygem'):
+                        depname = dep[8:-1]
+                        depset.add(depname)
             else:
                 self.log.debug("No dependencies.")
         self.deps = list(depset)  
