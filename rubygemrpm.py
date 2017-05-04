@@ -9,6 +9,7 @@ __email__ = "jhover@bnl.gov"
 __status__ = "Production"
 
 import argparse
+import datetime
 import logging
 import os
 import subprocess
@@ -337,7 +338,7 @@ class GemRPMCLI(object):
         print(self.results)
 
     def invoke(self):
-        starttime = time.time()
+        starttime = datetime.now()
         cp = ConfigParser()
         ns = self.results
         self.log.info("Config is %s" % ns.configpath)
@@ -350,7 +351,7 @@ class GemRPMCLI(object):
                                                 list(GemHandler.handledgems) ))
         self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems), 
                                                       list(GemHandler.problemgems)))
-        delta = time.time() - starttime
+        delta = datetime.now() - starttime
         self.log.info("Total time: %s " % str(delta))
 
 if __name__ == '__main__':
