@@ -96,10 +96,11 @@ class GemHandler(object):
         o = _runtimedcommand(cmd)
         if o is not None:
             self.log.debug("Out is %s" % o)
-            if len(o) > 1:
+            o = o.strip()
+            if len(o) > 3:
                 lines = o.split('\n')
                 for line in lines:
-                    if len(line) > 1:
+                    if len(line) > 3:
                         (dep, op, ver) = line.split()
                         self.log.debug("Dep is %s" % dep)
                         
