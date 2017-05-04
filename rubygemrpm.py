@@ -118,6 +118,7 @@ class GemHandler(object):
         '''
         '''
         sf = open(self.specfile, 'w')
+        sf.close()
         
         
         
@@ -183,7 +184,7 @@ class GemHandler(object):
         sf2 = open(self.specfile, 'w')
         for line in linelist:
             line = line.replace('BuildArch: noarch' , 'BuildArch: x86_64')
-        sf2.write(line)
+            sf2.write(line)
         sf2.close()
     
     
@@ -270,6 +271,7 @@ class GemRPMCLI(object):
         
         parser.add_argument('-s', '--skipdeps', 
                             action="store_true",
+                            type=bool,
                             default=False, 
                             dest='skipdeps', 
                             help='skip building deps recursively')  
