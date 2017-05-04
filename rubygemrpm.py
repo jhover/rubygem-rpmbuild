@@ -48,7 +48,7 @@ class GemHandler(object):
     handledgems = set()
     problemgems = set()
     
-    def __init__(self, cp , gemname, skipdeps=False):
+    def __init__(self, cp , gemname, skipdeps=False, rebuild=False):
         self.log = logging.getLogger()
         self.log.info("Handling gem %s" % gemname)
         self.config = cp
@@ -57,6 +57,7 @@ class GemHandler(object):
         self.gemtemplate = os.path.expanduser(cp.get('global','gemtemplate'))
         self.tempdir = os.path.expanduser(cp.get('global','tempdir'))
         self.skipdeps = skipdeps
+        self.rebuild = rebuild
         #self.packagelog = os.path.expanduser(cp.get('packagelog'))
     
     
@@ -161,25 +162,53 @@ class GemHandler(object):
             else:
                 self.log.debug("No dependencies.")
         self.deps = list(depset)  
+    
+    
+    def isBuilt(self):
+        '''
+        Checks to see if RPM for this specific gem and version is already built in
+        rpmbuilddir.
+        '''
+        naf = "%s/RPMS/noarch/rubygem-%s-%s-1.noarch.rpm" % (self.rpmbuilddir,
+                                                    self.gemname,
+                                                    self.version)
+        nf =  "%s/RPMS/x86_64/rubygem-%s-%s-1.x86_64.rpm" % (self.rpmbuilddir,
+                                                    self.gemname,
+                                                    self.version)
+        isbuilt = False
+        if os.path.isfile(naf):
+            isbuilt = True
+        if os.path.isfile(nf):
+            isbuilt = True
+        self.log.debug('RPM for rubygem-%s-%s exists.' % (self.gemname,
+                                                          self.version))
+        return isbuilt
+        
+        
         
     def buildRPM(self):
         '''
-    rpmbuild -bb $RPMBUILDDIR/SPECS/rubygem-$gem.spec    
+            rpmbuild -bb $RPMBUILDDIR/SPECS/rubygem-$gem.spec    
         '''
-        self.log.debug("Building gem %s" % self.gemname)
-        cmd =  "rpmbuild -bb %s/SPECS/rubygem-%s.spec" % (self.rpmbuilddir, 
-                                                          self.gemname)
-        self.log.debug("Command is %s" % cmd )
-        (o,e) = _runtimedcommand(cmd)
-        if o is not None:
-            self.log.info("RPM for rubygem-%s built OK." % self.gemname)
-        elif 'error: Arch dependent binaries in noarch package' in e:
-            self.log.warning('Native package, fixing and building...')
-            self.buildNativeRPM()   
+        if not self.isBuilt():
+            self.log.debug("Building gem %s" % self.gemname)
+            cmd =  "rpmbuild -bb %s/SPECS/rubygem-%s.spec" % (self.rpmbuilddir, 
+                                                              self.gemname)
+            self.log.debug("Command is %s" % cmd )
+            (o,e) = _runtimedcommand(cmd)
+            if o is not None:
+                self.log.info("RPM for rubygem-%s built OK." % self.gemname)
+            elif 'error: Arch dependent binaries in noarch package' in e:
+                self.log.warning('Native package, fixing and building...')
+                self.buildNativeRPM()   
+            else:
+                self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
+                GemHandler.problemgems.add(self.gemname)
+                raise GemBuildException('Problem building RPM.')
         else:
-            self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
-            GemHandler.problemgems.add(self.gemname)
-            raise GemBuildException('Problem building RPM.')
+            self.log.info("RPM for %s-%s already built. Skipping..." % (self.gemname, self.version))
+    
+    
     
     def convertSpecNative(self):
         '''
@@ -285,6 +314,13 @@ class GemRPMCLI(object):
                             dest='skipdeps', 
                             help='skip building deps recursively')  
         
+        parser.add_argument('-r', '--rebuild',
+                            action="store_true",
+                            default = False,
+                            dest = 'rebuild',
+                            help = 'Rebuild even if RPM exists.')
+        
+        
         parser.add_argument('gemname', 
                              action="store")
         
@@ -297,7 +333,7 @@ class GemRPMCLI(object):
         ns = self.results
         self.log.info("Config is %s" % ns.configpath)
         cp.read(os.path.expanduser(ns.configpath))
-        gh = GemHandler(cp, ns.gemname, skipdeps=ns.skipdeps)
+        gh = GemHandler(cp, ns.gemname, skipdeps=ns.skipdeps, rebuild=ns.rebuild)
         gh.handleGem()
         self.log.info("Handled %d gems: %s" % ( len(GemHandler.handledgems),
                                                 list(GemHandler.handledgems) ))
