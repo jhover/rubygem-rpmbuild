@@ -17,6 +17,10 @@ import time
 from ConfigParser import ConfigParser
 
 def _runtimedcommand(cmd):
+    '''
+    @param string:   Command shell string to be run. Can contain semicolons for compound commands. 
+    
+    '''
     log = logging.getLogger()
     before = time.time()
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -25,11 +29,11 @@ def _runtimedcommand(cmd):
     delta = time.time() - before
     log.debug('%s seconds to perform command' %delta)
     if p.returncode == 0:
-        log.debug('Leaving with OK return code.')
+        log.debug('Leaving with OK return code. Err is "5s"' % err)
     else:
         log.warning('Leaving with bad return code. rc=%s err=%s out=%s' %(p.returncode, err, out ))
         out = None
-    return out
+    return (out, err)
 
 
 
@@ -68,11 +72,12 @@ class GemHandler(object):
         
     def fetchGem(self):
         '''
+        Fetches this gem from 
         '''
         cmd =  "cd %s/SOURCES ;  gem fetch %s " % (self.rpmbuilddir, self.gemname)
         self.log.debug("Command is %s" % cmd )
-        o = _runtimedcommand(cmd)
-        if o is not None:
+        (o, e) = _runtimedcommand(cmd)
+        if o is not None and not e.startswith('ERR'):
             self.log.debug("Out is %s" % o)
             fields = o.split()
             nv = fields[1]
@@ -96,7 +101,7 @@ class GemHandler(object):
                                                                         self.rpmbuilddir,
                                                                         self.gemname)
         self.log.debug("Command is %s" % cmd )
-        o = _runtimedcommand(cmd)
+        (o, e) = _runtimedcommand(cmd)
         self.log.info("Created rubygem-%s.spec " % self.gemname)
     
     def fixSpec(self):
@@ -113,7 +118,7 @@ class GemHandler(object):
         depset = set()
         cmd =  "cd %s/SOURCES ;  gem2rpm -d %s-%s.gem" % (self.rpmbuilddir, self.gemname, self.version)
         self.log.debug("Command is %s" % cmd )
-        o = _runtimedcommand(cmd)
+        (o, e) = _runtimedcommand(cmd)
         if o is not None:
             self.log.debug("Out is %s" % o)
             o = o.strip()
@@ -143,7 +148,7 @@ class GemHandler(object):
         cmd =  "rpmbuild -bb %s/SPECS/rubygem-%s.spec" % (self.rpmbuilddir, 
                                                           self.gemname)
         self.log.debug("Command is %s" % cmd )
-        o = _runtimedcommand(cmd)
+        (o,e) = _runtimedcommand(cmd)
         if o is not None:
             self.log.info("RPM for rubygem-%s built OK." % self.gemname)
         else:
