@@ -188,7 +188,7 @@ class GemHandler(object):
             self.parseDeps()
             self.handleDeps()
         except GemBuildException, e:
-            self.log.error('Problem building gem %s: Error: %s' % self.gemname, e)
+            self.log.error('Problem building gem %s: Error: %s' % (self.gemname, e) )
 
 
 class GemRPMCLI(object):
