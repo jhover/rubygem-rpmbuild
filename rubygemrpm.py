@@ -203,7 +203,7 @@ class GemHandler(object):
             if o is not None:
                 self.log.info("RPM for rubygem-%s built OK." % self.gemname)
             #elif 'error: Arch dependent binaries in noarch package' in e:
-            elif 'Building native extensions.' in e:
+            elif 'Building native extensions.' in o:
                 self.log.warning('Native package, fixing and building...')
                 self.buildNativeRPM()   
             else:
