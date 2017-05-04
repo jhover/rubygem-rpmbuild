@@ -78,7 +78,7 @@ class GemHandler(object):
             nv = fields[1]
             self.version = nv[len(self.gemname)+1:]
             self.log.debug("Version is %s" % self.version)
-
+        self.log.info("Gem %s-%s fetched." % (self.gemname, self.version) )
    
     def makeSpec(self):
         '''
@@ -94,7 +94,7 @@ class GemHandler(object):
                                                                         self.gemname)
         self.log.debug("Command is %s" % cmd )
         o = _runtimedcommand(cmd)
-        self.log.debug("Created rubygem-%s.spec " % self.gemname)
+        self.log.info("Created rubygem-%s.spec " % self.gemname)
     
     def fixSpec(self):
         '''
@@ -142,7 +142,7 @@ class GemHandler(object):
         self.log.debug("Command is %s" % cmd )
         o = _runtimedcommand(cmd)
         if o is not None:
-            self.log.debug("RPM for rubygem-%s built OK." % self.gemname)
+            self.log.info("RPM for rubygem-%s built OK." % self.gemname)
         else:
             self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
     
@@ -158,7 +158,7 @@ class GemHandler(object):
                 gh.handleGem()
             else:
                 self.log.debug("Gem %s already done." % dep)
-        self.log.debug("Finished with deps for %s" % self.gemname)
+        self.log.info("Finished handling deps for %s" % self.gemname)
     
         
     def handleGem(self):
@@ -192,15 +192,8 @@ class GemRPMCLI(object):
         self.log.setLevel(logging.WARN)
         if self.results.debug:
             self.log.setLevel(logging.DEBUG)
-        # adding a new Handler for the console, 
-        # to be used only for DEBUG and INFO modes. 
-        #if self.options.logLevel in [logging.DEBUG, logging.INFO]:
-        #    if self.options.console:
-        #        console = logging.StreamHandler(sys.stdout)
-        #        console.setFormatter(formatter)
-        #        console.setLevel(self.options.logLevel)
-        #        self.log.addHandler(console)
-        #self.log.setLevel(self.options.logLevel)
+        if self.results.info:
+            self.log.setLevel(logging.INFO)
         self.log.info('Logging initialized.')
 
 
@@ -216,6 +209,11 @@ class GemRPMCLI(object):
                             action="store_true", 
                             dest='debug', 
                             help='debug logging')        
+
+        parser.add_argument('-v', '--verbose', 
+                            action="store_true", 
+                            dest='info', 
+                            help='info logging')  
         
         parser.add_argument('gemname', 
                              action="store")
