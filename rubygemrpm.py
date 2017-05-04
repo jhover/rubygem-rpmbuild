@@ -351,7 +351,7 @@ class GemRPMCLI(object):
         self.log.error("Problems with %d gems: %s" % (len(GemHandler.problemgems), 
                                                       list(GemHandler.problemgems)))
         delta = time.time() - starttime
-        self.log.info("Total time: %s " % delta)
+        self.log.info("Total time: %s " % str(delta))
 
 if __name__ == '__main__':
     rgcli = GemRPMCLI()
