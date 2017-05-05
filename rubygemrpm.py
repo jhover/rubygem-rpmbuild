@@ -237,7 +237,17 @@ class GemHandler(object):
         '''
         self.log.debug("Building gem %s native..." % self.gemname)
         self.convertSpecNative()
-        self.buildRPM()
+        self.log.debug("Building gem %s" % self.gemname)
+        cmd =  "rpmbuild -bb %s/SPECS/rubygem-%s.spec" % (self.rpmbuilddir, 
+                                                          self.gemname)
+        self.log.debug("Command is %s" % cmd )
+        (r, o,e) = _runtimedcommand(cmd)
+        if r is 0:
+            self.log.info("RPM for rubygem-%s built OK." % self.gemname) 
+        else:
+            self.log.error("Problem building RPM for rubygem-%s." % self.gemname)
+            GemHandler.problemgems.add(self.gemname)
+            raise GemBuildException('Problem building RPM.')
     
     
     def handleDeps(self):
