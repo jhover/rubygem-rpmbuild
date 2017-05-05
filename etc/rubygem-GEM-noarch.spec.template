@@ -31,6 +31,8 @@ AutoReqProv: no
 
 %define gemdir /usr/share/gems
 %define gembuilddir %{buildroot}%{gemdir}
+%define _unpackaged_files_terminate_build 0
+
 
 %description
 <%= spec.description %>
@@ -60,7 +62,8 @@ rmdir %{gembuilddir}/bin
 <% end -%>
 %{gemdir}/gems/<%= spec.name %>-<%= spec.version %>/
 
-%doc %{gemdir}/doc/<%= spec.name %>-<%= spec.version %>
+%doc 
+%{gemdir}/doc/<%= spec.name %>-<%= spec.version %>
 %{gemdir}/cache/<%= package.spec.file_name %>
 %{gemdir}/specifications/<%= package.spec.file_name %>spec
 
