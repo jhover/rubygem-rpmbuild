@@ -1,4 +1,26 @@
 
+---
+Some gems (e.g. concurrent ruby) require glibc.i686
+
+---
+Some gems may install conflicting bins.
+ convert_to_shoulda context
+ shoulda_context, thoughtbot_shoulda
+
+--
+Conflicting dep specifications between rubygem.org and epel 7. 
+  -> remove rubygems from epel7. 
+  
+  
+-- 
+rpmbuild not finding proper directy for some gems, concurrent-ruby has/or doesn't have linux-x86_64 exetension
+within dirs. 
+  -> cloned direclty from github, rebuilt. 
+  
+--
+unpackaged files
+  -> add unpackaged_files_terminate_build 0 to template. 
+
 
 [jhover@griddev03 SOURCES]$ gem2rpm -d puma-3.8.2.gem 
 rubygem(rdoc) => 4.0
@@ -9,7 +31,6 @@ rubygem(rake-compiler) => 0.8
 rubygem(rake-compiler) < 1
 rubygem(hoe) => 3.14
 rubygem(hoe) < 4
-
 
 
 Problems:
